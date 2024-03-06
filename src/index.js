@@ -5,8 +5,10 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
-import { store } from "./store/store";
 import { Provider } from "react-redux";
+import { setupStore } from "./store/store";
+
+let store = setupStore();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
