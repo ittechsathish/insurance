@@ -1,7 +1,9 @@
 ### Assumptions
 
 Age will auto calculated from DOB
+
 Age validated - greater than zero
+
 Sum Insured validated - greater than zero
 
 ## Available Scripts
