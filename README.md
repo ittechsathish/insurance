@@ -1,6 +1,8 @@
-# Getting Started with Create React App
+### Assumptions
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Age will auto calculated from DOB
+Age validated - greater than zero
+Sum Insured validated - greater than zero
 
 ## Available Scripts
 

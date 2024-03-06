@@ -9,6 +9,12 @@ const initialState = {
   sumInsured: "",
   occupation: "",
   monthlyPremium: "",
+
+  //error flags
+  nameError: false,
+  dobError: false,
+  sumInsuredError: false,
+  occupationError: false,
 };
 
 export const calculatePremiumSlice = createSlice({
@@ -31,6 +37,24 @@ export const calculatePremiumSlice = createSlice({
     setMonthlyPremium: (state, { payload }) => {
       state.monthlyPremium = payload;
     },
+    setNameError: (state, { payload }) => {
+      state.nameError = payload;
+    },
+    setDobError: (state, { payload }) => {
+      state.dobError = payload;
+    },
+    setSumInsuredError: (state, { payload }) => {
+      state.sumInsuredError = payload;
+    },
+    setOccupationError: (state, { payload }) => {
+      state.occupationError = payload;
+    },
+    resetErrorMessages: (state, { payload }) => {
+      state.occupationError = false;
+      state.sumInsuredError = false;
+      state.dobError = false;
+      state.nameError = false;
+    },
   },
 });
 
@@ -41,6 +65,11 @@ export const {
   setSumInsured,
   setOccupation,
   setMonthlyPremium,
+  setNameError,
+  setDobError,
+  setSumInsuredError,
+  setOccupationError,
+  resetErrorMessages,
 } = calculatePremiumSlice.actions;
 
 export default calculatePremiumSlice.reducer;

@@ -3,10 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { FormField, Form, FormSelect } from "semantic-ui-react";
 import {
   calculateMonthlyPremiumAsync,
+  resetErrorMessages,
   setDob,
+  setDobError,
+  setMonthlyPremium,
   setName,
+  setNameError,
   setOccupation,
+  setOccupationError,
   setSumInsured,
+  setSumInsuredError,
 } from "./calculate-premium.slice";
 
 const options = [
@@ -19,9 +25,18 @@ const options = [
 ];
 
 export default function CalculatePremium() {
-  const { monthlyPremium, name, age, sumInsured, occupation } = useSelector(
-    (state) => state.calculatePremium
-  );
+  const {
+    monthlyPremium,
+    name,
+    age,
+    sumInsured,
+    occupation,
+    dob,
+    nameError,
+    dobError,
+    sumInsuredError,
+    occupationError,
+  } = useSelector((state) => state.calculatePremium);
   const dispatch = useDispatch();
 
   function setNameEvt(e) {
@@ -42,7 +57,30 @@ export default function CalculatePremium() {
 
   useEffect(() => {
     let isFormValid = true;
-    //todo validate model
+
+    //reset all errors
+    dispatch(resetErrorMessages(true));
+
+    if (!name) {
+      isFormValid = false;
+      dispatch(setNameError(true));
+    }
+
+    if (age < 1) {
+      isFormValid = false;
+      dispatch(setDobError(true));
+    }
+
+    // Todo to handle any number
+    if (sumInsured < 1 || sumInsured > 2147483647) {
+      isFormValid = false;
+      dispatch(setSumInsuredError(true));
+    }
+
+    if (!occupation) {
+      isFormValid = false;
+      dispatch(setOccupationError(true));
+    }
 
     if (isFormValid) {
       console.log("Dispatching_Service");
@@ -54,8 +92,10 @@ export default function CalculatePremium() {
           occupation,
         })
       );
+    } else {
+      dispatch(setMonthlyPremium(0));
     }
-  }, [occupation]);
+  }, [name, age, sumInsured, occupation]);
 
   return (
     <div className="calculate-premium ui segment">
@@ -69,11 +109,20 @@ export default function CalculatePremium() {
             type="text"
             placeholder="Name"
           />
-          {/* <label>Please enter</label> */}
+          {nameError ? (
+            <label className="ui pointing red basic label error-label">
+              Please enter your name.
+            </label>
+          ) : null}
         </FormField>
         <FormField>
           <label>Date Of Birth</label>
           <input onChange={setDobEvt} type="date" placeholder="Date Of Birth" />
+          {dobError ? (
+            <label className="ui pointing red basic label error-label">
+              Age should be greater than zero
+            </label>
+          ) : null}
         </FormField>
         <FormField>
           <label>Your Age From DOB</label>
@@ -92,7 +141,13 @@ export default function CalculatePremium() {
             onChange={sumInsuredEvt}
             type="number"
             placeholder="Death Sum Insured"
+            pattern="[0-9]"
           />
+          {sumInsuredError ? (
+            <label className="ui pointing red basic label error-label">
+              Death Sum Insured should be greater than zero
+            </label>
+          ) : null}
         </FormField>
         <FormField>
           <label>Occupation</label>
@@ -101,11 +156,16 @@ export default function CalculatePremium() {
             options={options}
             placeholder="Occupation"
           />
+          {occupationError ? (
+            <label className="ui pointing red basic label error-label">
+              Please select occupation
+            </label>
+          ) : null}
         </FormField>
 
         <label className="premium-calculated">
           <h3>Your Monthly Premium is:</h3>{" "}
-          <label className="ui blue label">{monthlyPremium || "-"}</label>
+          <label className="ui blue label">$ {monthlyPremium || "-"}</label>
         </label>
       </Form>
     </div>

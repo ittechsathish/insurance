@@ -6,3 +6,7 @@
 
 .calculate-premium {
 }
+
+.ui.red.label.error-label {
+  margin: 5px 0;
+}
